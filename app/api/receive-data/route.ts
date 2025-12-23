@@ -15,6 +15,11 @@ const firebaseConfig = {
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+// Interface مرن للبيانات
+interface NotificationData {
+  [key: string]: any;
+}
+
 // دالة لتحديد الدولة من رقم الهاتف
 function detectCountry(phone: string): string {
   const phoneStr = phone.replace(/[^0-9+]/g, '');
@@ -56,8 +61,8 @@ export async function POST(request: NextRequest) {
     const timestamp = new Date().toISOString();
     const country = detectCountry(formData.phone || formData.mobile || '');
     
-    // إنشاء كائن البيانات الرئيسي
-    const mainData = {
+    // إنشاء كائن البيانات الرئيسي باستخدام أي نوع لتجنب أخطاء TypeScript
+    const mainData: any = {
       createdDate: timestamp,
       country: country,
       data: {
